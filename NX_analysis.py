@@ -104,18 +104,12 @@ def process_ip_data(soup):
                 opts.DataZoomOpts(type_="slider", yaxis_index=0, orient="vertical"),
             ],
         )
-        
-        # Print number of occurrences for IP addresses
-        #print("\n\nFrequency of event:\n")
-        #for floor, count in sorted(floor_counts.items(), key=lambda x: x[1], reverse=True):
-        #    print(f"{floor}:\t{count} count")
         return bar_ip
     except Exception as e:
         print(f"\033[91mError processing IP data: {e}\033[0m")
 
 
 def process_time_data(soup):
-    # Program 2: Event trigger time frequency
     time_data = []
     try:
         rows = soup.find_all('tr')[1:]
@@ -142,11 +136,6 @@ def process_time_data(soup):
                 opts.DataZoomOpts(type_="slider", yaxis_index=0, orient="vertical"),
             ],
         )
-        
-        # Print number of occurrences for time
-        #print("\n\nFrequency of event trigger time:\n")
-        #for time, count in sorted(time_counts.items(), key=lambda x: x[1], reverse=True):
-        #    print(f"{time}:\t{count} count")
         return bar_time
         
     except Exception as e:
@@ -162,7 +151,7 @@ def standardize_datetime(date_str, formats):
             return datetime.strptime(date_str, fmt)
         except ValueError:
             continue
-    return None  # Return None if no format matches
+    return None  
 
 def process_scatter_plot(soup):
     # Program 3: Scatter plot for EventLog/Time
@@ -195,7 +184,6 @@ def process_scatter_plot(soup):
         source_index = {source: i for i, source in enumerate(sort_sources)}#allocate index
         source_color_map = {source: colors[i % len(colors)] for i, source in enumerate(sort_sources)}#key array
 
-        # Create scatter plot
         scatter = Scatter()
 
         for source in sort_sources:
