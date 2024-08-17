@@ -14,23 +14,25 @@
 
 ## 具體操作
 
-1 :Export network issue logs to html
+**1 :Export network issue logs to html**
 ![image](picture/network2.png)
 ![image](picture/export_html.gif)
 
-2 :Generate charts
+**2 :Generate charts**
 ![image](picture/generate_charts.gif)
 ![image](picture/charts.png)
 
-3 :Common reasons for network camera disconnection
+**3 :Common reasons for network camera disconnection**
 ![image](picture/network.png)
 
-4 :Ask chatgpt a question
+**4 :Ask chatgpt a question**
 ![image](picture/chatgpt.png)
 
 
 ## 使用案例
 
-我曾經在一座大樓中，當所有攝影機同時斷線時，我利用這個程式進行分析，最終確認了整座建築的電力異常，並發現某些樓層的UPS也有問題。也可以利用在人流統計表
+1.我曾經在一座大樓中，當所有攝影機同時斷線時，我利用這個程式進行分析，最終確認了整座建築的電力異常，並發現某些樓層的UPS也有問題。
+
+2.可以利用在人流統計表
 ![image](picture/people_count.png)
 
