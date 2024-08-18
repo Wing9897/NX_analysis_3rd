@@ -1,9 +1,9 @@
 from collections import Counter
 from bs4 import BeautifulSoup
 from pyecharts import options as opts
-from pyecharts.charts import Bar, Page, Scatter
+from pyecharts.charts import Bar, Page, Scatter , Line
 from pyecharts.commons.utils import JsCode
-from datetime import datetime
+from datetime import datetime , timedelta
 from tqdm import tqdm
 import webbrowser
 
@@ -74,7 +74,16 @@ def read_html_file():
     except Exception as e:
         print(f"\033[91mError reading file: {e}\033[0m")
         exit()
-        
+
+def standardize_datetime(date_str, formats):
+    for world, en in replacements.items():
+        date_str = date_str.replace(world, en)
+    for fmt in formats:
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+    return None  # Return None if no format matches        
 
 def process_ip_data(soup):
     ip_data = []
@@ -94,64 +103,75 @@ def process_ip_data(soup):
         bar_ip.add_xaxis(x_axis_ip)
         bar_ip.add_yaxis("The number of occurrences:", list(floor_counts.values()))
         bar_ip.set_global_opts(
-            title_opts=opts.TitleOpts(title="Frequency of Event"),
+            title_opts=opts.TitleOpts(title="Number of event triggers per source"),
             xaxis_opts=opts.AxisOpts(name="Location/Devices", type_="category", axislabel_opts=opts.LabelOpts(rotate=-30)),
             yaxis_opts=opts.AxisOpts(name="Count"),
             tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="cross"),
             datazoom_opts=[
-                opts.DataZoomOpts(type_="slider", xaxis_index=0),
-                opts.DataZoomOpts(type_="inside", xaxis_index=0),
-                opts.DataZoomOpts(type_="slider", yaxis_index=0, orient="vertical"),
+                opts.DataZoomOpts(type_="slider", xaxis_index=0, range_start=0, range_end=100),
+                opts.DataZoomOpts(type_="slider", yaxis_index=0, orient="vertical", range_start=0, range_end=100),
+                opts.DataZoomOpts(type_="inside", xaxis_index=0)
             ],
         )
+        
+        # Print number of occurrences for IP addresses
+        #print("\n\nFrequency of event:\n")
+        #for floor, count in sorted(floor_counts.items(), key=lambda x: x[1], reverse=True):
+        #    print(f"{floor}:\t{count} count")
         return bar_ip
     except Exception as e:
         print(f"\033[91mError processing IP data: {e}\033[0m")
 
 
+def group_time_ranges(time_list, range_minutes):
+    """按指定的分鐘數進行時間範圍分組"""
+    grouped_counts = Counter()
+    for time in time_list:
+        rounded_time = time - timedelta(minutes=time.minute % range_minutes,
+                                        seconds=time.second,
+                                        microseconds=time.microsecond)
+        grouped_counts[rounded_time] += 1
+    return grouped_counts
+
 def process_time_data(soup):
-    time_data = []
+    formats = ['%Y/%m/%d %p %I:%M:%S']
+
     try:
         rows = soup.find_all('tr')[1:]
-        for row in tqdm(rows, desc="Processing time data",colour = 'red'):
-            cells = row.find_all('td')
-            row_data = [cell.text.strip() for cell in cells]
-            time_data.append(row_data)
+        time_data = [row.find_all('td')[0].text.strip() for row in tqdm(rows, desc="Processing time data", colour='red')]
 
-        time_counts = Counter(row[0] for row in time_data)
+        standardized_times = [t for t in (standardize_datetime(t, formats) for t in time_data) if t]
 
-        # Create second bar chart for event trigger time
-        bar_time = Bar()
-        x_axis_time = [time for time in time_counts.keys()]
-        bar_time.add_xaxis(x_axis_time)
-        bar_time.add_yaxis("The number of occurrences:", list(time_counts.values()))
-        bar_time.set_global_opts(
-            title_opts=opts.TitleOpts(title="Frequency of Event Trigger Time"),
-            xaxis_opts=opts.AxisOpts(name="Time", type_="category", axislabel_opts=opts.LabelOpts(rotate=-30)),
+        range_minutes = 60  
+        time_counts = group_time_ranges(standardized_times, range_minutes)
+
+        line_time = Line()
+        x_axis_time = sorted(time_counts.keys())
+        line_time.add_xaxis([t.strftime('%Y/%m/%d %H:%M:%S') for t in x_axis_time])
+        line_time.add_yaxis("The number of occurrences:", [time_counts[t] for t in x_axis_time], is_smooth=True)
+
+        line_time.set_global_opts(
+            title_opts=opts.TitleOpts(title="Number of event triggers per hour"),
+            xaxis_opts=opts.AxisOpts(
+                name="Time",
+                type_="category",
+                axislabel_opts=opts.LabelOpts(rotate=-30)
+            ),
             yaxis_opts=opts.AxisOpts(name="Count"),
-            tooltip_opts=opts.TooltipOpts(trigger="axis", axis_pointer_type="cross"),
+            tooltip_opts=opts.TooltipOpts(trigger="axis"),
             datazoom_opts=[
-                opts.DataZoomOpts(type_="slider", xaxis_index=0),
-                opts.DataZoomOpts(type_="inside", xaxis_index=0),
-                opts.DataZoomOpts(type_="slider", yaxis_index=0, orient="vertical"),
+                opts.DataZoomOpts(type_="slider", xaxis_index=0, range_start=0, range_end=100),
+                opts.DataZoomOpts(type_="slider", yaxis_index=0, orient="vertical", range_start=0, range_end=100),
+                opts.DataZoomOpts(type_="inside", xaxis_index=0)
             ],
+            legend_opts=opts.LegendOpts(is_show=True)
         )
-        return bar_time
-        
+
+        return line_time
+
     except Exception as e:
         print(f"\033[91mError processing time data: {e}\033[0m")
 
-
-
-def standardize_datetime(date_str, formats):
-    for world, en in replacements.items():
-        date_str = date_str.replace(world, en)
-    for fmt in formats:
-        try:
-            return datetime.strptime(date_str, fmt)
-        except ValueError:
-            continue
-    return None  
 
 def process_scatter_plot(soup):
     # Program 3: Scatter plot for EventLog/Time
@@ -184,6 +204,7 @@ def process_scatter_plot(soup):
         source_index = {source: i for i, source in enumerate(sort_sources)}#allocate index
         source_color_map = {source: colors[i % len(colors)] for i, source in enumerate(sort_sources)}#key array
 
+        # Create scatter plot
         scatter = Scatter()
 
         for source in sort_sources:
@@ -243,9 +264,9 @@ def process_scatter_plot(soup):
                 )
             ),
             datazoom_opts=[
-                opts.DataZoomOpts(type_="slider", xaxis_index=0, pos_bottom="10%"),
-                opts.DataZoomOpts(type_="inside", xaxis_index=0),
-                opts.DataZoomOpts(type_="slider", yaxis_index=0, orient="vertical"),           
+                opts.DataZoomOpts(type_="slider", xaxis_index=0, pos_bottom="10%", range_start=0, range_end=100),
+                opts.DataZoomOpts(type_="slider", yaxis_index=0, orient="vertical", range_start=0, range_end=100),
+                opts.DataZoomOpts(type_="inside", xaxis_index=0)                
             ],
             legend_opts=opts.LegendOpts(
                 type_="scroll",
