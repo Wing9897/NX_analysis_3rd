@@ -34,7 +34,7 @@ If a network device shows abnormal status in the scatter plot for a long period 
 
 ## Use Cases
 
-1. In a building where all cameras lost connection simultaneously, I used this program for analysis and ultimately identified electrical issues throughout the building, discovering problems with the UPS on certain floors.
+1. I was once in a building where there was a recording of all network devices going offline at the same time. I used this program to analyze the situation and eventually confirmed that there were power anomalies in the entire building, and I found that there were problems with the UPS on certain floors as well.
 
 2. You can use it for foot traffic statistics by setting the source as the floor number in a simple generic event. Export the entire generic event log as HTML, then use my program to generate foot traffic charts.  
 ![image](picture/people_count.png)
