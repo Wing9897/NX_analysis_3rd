@@ -1,5 +1,8 @@
 # NX Log to Chart Converter
 
+## README.md
+- zh_TW [繁体中文](README.md)
+
 ## Overview
 
 This program converts HTML data exported from NX logs into visual charts, helping users analyze network issues. Through scatter plots and other charts, you can easily identify and diagnose equipment failures, and also visualize information from other logs.
