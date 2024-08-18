@@ -1,6 +1,6 @@
 # NX Log to Chart Converter
 
-# README.md
+## README.md
 - en [English](README_en.md)
 
 ## 概述
