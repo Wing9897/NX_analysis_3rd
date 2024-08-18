@@ -134,13 +134,12 @@ def group_time_ranges(time_list, range_minutes):
     return grouped_counts
 
 def process_time_data(soup):
-    formats = ['%Y/%m/%d %p %I:%M:%S']
 
     try:
         rows = soup.find_all('tr')[1:]
         time_data = [row.find_all('td')[0].text.strip() for row in tqdm(rows, desc="Processing time data", colour='red')]
 
-        standardized_times = [t for t in (standardize_datetime(t, formats) for t in time_data) if t]
+        standardized_times = [t for t in (standardize_datetime(t, date_formats) for t in time_data) if t]
 
         range_minutes = 60  
         time_counts = group_time_ranges(standardized_times, range_minutes)
