@@ -14,5 +14,23 @@ This program converts HTML data exported from NX logs into visual charts, helpin
 
 ## Instructions
 
-**1: Export network issue logs to HTML**
-![image][]![image][]**2: Generate charts**![image][]![image][]**3: Common reasons for network camera disconnection**![image][]**4: Ask ChatGPT a question**![image][]## Use Cases1. In a building where all cameras lost connection simultaneously, I used this program for analysis and ultimately identified electrical issues throughout the building, discovering problems with the UPS on certain floors.2. You can use it for foot traffic statistics by setting the source as the floor number in a simple generic event. Export the entire generic event log as HTML, then use my program to generate foot traffic charts.![image][]
+**1: Export network issue logs to HTML**  
+![image](picture/network2.png)  
+![image](picture/export_html.gif)
+
+**2: Generate charts**  
+![image](picture/generate_charts.gif)  
+![image](picture/charts.png)
+
+**3: Common reasons for network camera disconnection**  
+![image](picture/network.png)
+
+**4: Ask ChatGPT a question**  
+![image](picture/chatgpt.png)
+
+## Use Cases
+
+1. In a building where all cameras lost connection simultaneously, I used this program for analysis and ultimately identified electrical issues throughout the building, discovering problems with the UPS on certain floors.
+
+2. You can use it for foot traffic statistics by setting the source as the floor number in a simple generic event. Export the entire generic event log as HTML, then use my program to generate foot traffic charts.  
+![image](picture/people_count.png)
