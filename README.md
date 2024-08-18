@@ -27,6 +27,7 @@
 
 **3 :Common reasons for network camera disconnection**
 ![image](picture/network.png)
+如果某個網路設備在散點圖中長期顯示異常狀態,這可能意味著該設備出現問題,例如PoE供電不足、網路連接異常或接線錯誤等。如果同一時間出現多個設備斷線的情況,則可能是交換機端出現了問題。除了散點圖能排解故障外，還可以使用裝置斷線次數的棒形圖和每小時斷線次數的折線圖。
 
 **4 :Ask chatgpt a question**
 ![image](picture/chatgpt.png)
@@ -34,7 +35,7 @@
 
 ## 使用案例
 
-1.我曾經在一座大樓中，當所有攝影機同時斷線時，我利用這個程式進行分析，最終確認了整座建築的電力異常，並發現某些樓層的UPS也有問題。
+1.我曾經在一座大樓中，有一段紀錄是所有網路設備同時斷線，我利用這個程式進行分析，最終確認了整座建築的電力異常，並發現某些樓層的UPS也有問題。
 
 2.可以利用在人流統計表,利用簡單的generic event 功能，把source設定為樓層號碼，然後把整個generic event log 匯出成html再使用我的程式就可以得到人流量圖表。
 ![image](picture/people_count.png)
