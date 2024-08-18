@@ -27,6 +27,7 @@ This program converts HTML data exported from NX logs into visual charts, helpin
 
 **3: Common reasons for network camera disconnection**  
 ![image](picture/network.png)
+If a network device shows abnormal status in the scatter plot for a long period of time, it may mean that the device has a problem, such as insufficient PoE power supply, abnormal network connection, or wiring error, etc. If multiple devices are disconnected at the same time, it may be a problem at the switch end. If more than one device is offline at the same time, there may be a problem at the switch end. In addition to a scatter plot for troubleshooting, you can use a bar graph of the number of device outages and a line graph of the number of outages per hour.
 
 **4: Ask ChatGPT a question**  
 ![image](picture/chatgpt.png)
