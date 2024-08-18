@@ -1,5 +1,8 @@
 # NX Log to Chart Converter
 
+# README.md
+- en [English](README_en.md)
+
 ## 概述
 
 這個程式將NX log匯出的HTML數據轉換為可視化圖表，其中的用途是可以幫助用戶分析網路問題。透過散點圖和其他圖表，您可以輕鬆識別和診斷設備故障。而且更可以把其他Log的信息製成圖表。
