@@ -1,7 +1,7 @@
 # NX Log to Chart Converter
 
 ## README.md
-- zh_TW [繁体中文](README.md)
+- zh_HK [繁体中文](README.zh-HK.md)
 
 ## Overview
 
